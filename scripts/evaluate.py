@@ -14,18 +14,21 @@ def count_unique_terms(preprocessed_corpus_file):
     return len(unique_terms), list(unique_terms)[:100]  # Return total count and a sample of 100 tokens
 
 def extract_top_results(results_file, query_ids, top_n=10):
-    """Extracts top N results for given queries."""
-    extracted_results = []
+    """Extracts top N results for given queries, ensuring at least 10 results from each query."""
+    extracted_results = {query_id: [] for query_id in query_ids}
     with open(results_file, "r") as f:
         next(f)  # Skip header
         for line in f:
             parts = line.strip().split()
             query_id = parts[0]
-            if query_id in query_ids:
-                extracted_results.append(line.strip())
-                if len(extracted_results) >= top_n:
-                    break
-    return extracted_results
+            if query_id in query_ids and len(extracted_results[query_id]) < top_n:
+                extracted_results[query_id].append(line.strip())
+    
+    combined_results = []
+    for query_id in query_ids:
+        combined_results.extend(extracted_results[query_id])
+    
+    return combined_results
 
 def load_relevance(file_path):
     """Load ground truth relevance judgments (test.tsv)."""
@@ -84,8 +87,8 @@ if __name__ == "__main__":
     print(f"Total unique terms in the corpus: {vocab_size}")
     print(f"Sample 100 Tokens: {sample_tokens}")
 
-    # Extract top results for queries 1 & 3
-    top_results = extract_top_results(results_file, {"1", "3"})
+    # Extract top 10 results for queries 1 & 3
+    top_results = extract_top_results(results_file, {"1", "3"}, top_n=10)
     print("\nFirst 10 Results for Queries 1 & 3:")
     for result in top_results:
         print(result)
