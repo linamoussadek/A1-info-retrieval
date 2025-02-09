@@ -31,5 +31,5 @@ def generate_inverted_index(input_file, output_file, stopwords_file):
         json.dump({"index": inverted_index, "doc_lengths": doc_lengths, "idf": idf_values}, f, indent=4)
 
 if __name__ == "__main__":
-    generate_inverted_index("../scifact/preprocessed_corpus.json", "../scifact/invertedIndex.json", "../stopwords.txt")
+    generate_inverted_index("../output/preprocessed_corpus.json", "../output/invertedIndex.json", "../stopwords.txt")
     print("Inverted index created successfully.")
