@@ -4,7 +4,7 @@
 
 ## **Group Members**
 - **Jack Snelgrove** - 
-- **Lina Moussadek** - 
+- **Lina Moussadek** - 300259985
 - **Eli Wynn** - 
 
 ### **Task Division**
@@ -80,8 +80,6 @@ The system produces a **ranked list of documents** for each query and outputs re
 ---
 
 ## **Algorithmic Implementation**
-
-Algorithm
 
 ### **Step 1: Preprocessing**
 #### **Algorithm**
