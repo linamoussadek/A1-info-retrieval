@@ -1,61 +1,103 @@
 import json
 import math
+import re
 from collections import defaultdict
+from nltk.corpus import wordnet
+from nltk.stem import PorterStemmer
 
-# BM25 parameters (optimized for balanced performance)
-k1 = 1.5  # Scaling factor for term frequency
-b = 0.75  # Normalization parameter for document length
-
-def compute_bm25_scores(query_tokens, inverted_index, doc_lengths, avg_doc_length):
-    """Compute BM25 scores for each document given a query"""
-    scores = defaultdict(float)
-    num_docs = len(doc_lengths)
-
-    for term in query_tokens:
-        if term in inverted_index:
-            df = len(inverted_index[term])  # Document frequency
-            idf = math.log((num_docs - df + 0.5) / (df + 0.5) + 1)  # Smoothed IDF
-
-            for doc_id, tf in inverted_index[term].items():
-                doc_length = doc_lengths[doc_id]
-                bm25_score = idf * ((tf * (k1 + 1)) / (tf + k1 * (1 - b + b * (doc_length / avg_doc_length))))
-                scores[doc_id] += bm25_score  # Accumulate scores
-
-    return sorted(scores.items(), key=lambda x: x[1], reverse=True)
-
-def retrieve_and_rank(query, inverted_index, doc_lengths):
-    """Process query and return BM25-ranked documents"""
-    query_tokens = query.split()
-    avg_doc_length = sum(doc_lengths.values()) / len(doc_lengths)  # Compute average document length
-    ranked_docs = compute_bm25_scores(query_tokens, inverted_index, doc_lengths, avg_doc_length)
-    return ranked_docs
-
-def load_inverted_index(index_file):
-    with open(index_file, 'r') as f:
-        data = json.load(f)
-    return data["index"], data["doc_lengths"]  # Load both index & document lengths
+# BM25 parameters
+k1 = 1.2
+b = 0.75
 
 def load_queries(query_file):
+    """Loads test queries from the JSONL file."""
     with open(query_file, 'r') as f:
         return [json.loads(line) for line in f]
 
-def main():
+def preprocess_query(query, stopwords_set):
+    """Preprocess queries (tokenization, stopword removal, stemming)."""
+    tokens = re.findall(r'\b[a-zA-Z]+\b', query.lower())  # Extract words only
+    tokens = [token for token in tokens if token not in stopwords_set]  # Remove stopwords
+    stemmer = PorterStemmer()
+    return [stemmer.stem(token) for token in tokens]  # Apply stemming
+
+def expand_query(query_tokens, inverted_index, doc_lengths, idf_values, top_n=5):
+    """Expand query using WordNet synonyms + Pseudo-Relevance Feedback."""
+    expanded_query = set(query_tokens)
+
+    # Add WordNet synonyms
+    for token in query_tokens:
+        for syn in wordnet.synsets(token):
+            for lemma in syn.lemmas():
+                expanded_query.add(lemma.name().replace("_", " "))
+
+    # Use pseudo-relevance feedback (get top retrieved docs)
+    scores = compute_bm25(query_tokens, inverted_index, doc_lengths, sum(doc_lengths.values()) / len(doc_lengths), idf_values)
+    top_docs = [doc_id for doc_id, _ in scores[:top_n]]
+
+    # Extract top words from top documents
+    word_freq = defaultdict(int)
+    for doc_id in top_docs:
+        for word in inverted_index.get(doc_id, {}):
+            word_freq[word] += inverted_index[word].get(doc_id, 0)
+
+    # Add most frequent words to expanded query
+    sorted_terms = sorted(word_freq.items(), key=lambda x: x[1], reverse=True)[:5]
+    for term, _ in sorted_terms:
+        expanded_query.add(term)
+
+    return list(expanded_query)
+
+def compute_bm25(query_tokens, inverted_index, doc_lengths, avg_doc_length, idf_values):
+    """Compute BM25 scores."""
+    scores = defaultdict(float)
+
+    for term in query_tokens:
+        if term in inverted_index:
+            idf = idf_values.get(term, 0)
+            for doc_id, tf in inverted_index[term].items():
+                doc_length = doc_lengths[doc_id]
+                bm25_score = idf * ((tf * (k1 + 1)) / (tf + k1 * (1 - b + b * (doc_length / avg_doc_length))))
+                scores[doc_id] += bm25_score
+
+    return sorted(scores.items(), key=lambda x: x[1], reverse=True)
+
+def retrieve_and_rank(query, inverted_index, doc_lengths, idf_values, stopwords_set):
+    """Retrieve ranked documents using BM25."""
+    query_tokens = preprocess_query(query, stopwords_set)
+    expanded_query = expand_query(query_tokens, inverted_index, doc_lengths, idf_values)
+    avg_doc_length = sum(doc_lengths.values()) / len(doc_lengths)
+
+    ranked_docs = compute_bm25(expanded_query, inverted_index, doc_lengths, avg_doc_length, idf_values)
+    return ranked_docs
+
+def load_inverted_index(index_file):
+    """Loads the inverted index, document lengths, and IDF values."""
+    with open(index_file, 'r') as f:
+        data = json.load(f)
+    return data["index"], data["doc_lengths"], data["idf"]
+
+if __name__ == "__main__":
     index_file = "../scifact/invertedIndex.json"
     query_file = "../scifact/queries.jsonl"
+    stopwords_file = "../stopwords.txt"
     output_file = "Results.txt"
 
-    inverted_index, doc_lengths = load_inverted_index(index_file)
+    # Load inverted index & queries
+    inverted_index, doc_lengths, idf_values = load_inverted_index(index_file)
     queries = load_queries(query_file)
 
+    # Load stopwords
+    with open(stopwords_file, 'r') as f:
+        stopwords_set = set(f.read().splitlines())
+
+    # Process queries
     with open(output_file, "w") as f:
         f.write("Query ID | Q0 | doc ID | ranking | score | Tag\n")
         for query in queries:
-            query_id = query["_id"]
-            query_text = query["text"]
-            ranked_results = retrieve_and_rank(query_text, inverted_index, doc_lengths)
+            ranked_results = retrieve_and_rank(query["text"], inverted_index, doc_lengths, idf_values, stopwords_set)
 
             for rank, (doc_id, score) in enumerate(ranked_results[:100], start=1):
-                f.write(f"{query_id} Q0 {doc_id} {rank} {score:.4f} BM25\n")
+                f.write(f"{query['_id']} Q0 {doc_id} {rank} {score:.4f} BM25+QueryExpansion\n")
 
-if __name__ == "__main__":
-    main()
+    print("✅ Retrieval and ranking completed. Results saved to Results.txt.")
