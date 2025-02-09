@@ -12,6 +12,7 @@
 - **Indexing & Inverted Index Construction:** Jack Snelgrove
 - **Retrieval & Ranking using BM25:** Eli Wynn
 - **Evaluation & Report Writing:** Lina, Jack and Eli
+- **README writeup:** Lina
 
 ---
 
