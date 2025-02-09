@@ -236,14 +236,28 @@ The retrieval and ranking step is responsible for returning the most relevant do
 ```
 
 #### **First 10 Results for Queries 1 & 3**
-| Query ID | Q0 | Document ID | Rank | Score | Run Name |
-|----------|----|-------------|------|-------|------------------|
-| 1        | Q0 | 21257564    | 1    | 9.7562 | BM25+QueryExpansion |
-| 1        | Q0 | 18953920    | 2    | 8.3847 | BM25+QueryExpansion |
-| 1        | Q0 | 13231899    | 3    | 7.9082 | BM25+QueryExpansion |
-| 1        | Q0 | 7581911     | 4    | 7.7017 | BM25+QueryExpansion |
-| 1        | Q0 | 20155713    | 5    | 7.5632 | BM25+QueryExpansion |
-| 3        | Q0 | 21456232    | 10   | 6.2630 | BM25+QueryExpansion |
+| Query ID | Q0 | Document ID | Rank | Score  | Run Name               |
+|----------|----|------------|------|--------|------------------------|
+| 1        | Q0 | 21257564   | 1    | 9.7562 | BM25+QueryExpansion    |
+| 1        | Q0 | 18953920   | 2    | 8.3847 | BM25+QueryExpansion    |
+| 1        | Q0 | 13231899   | 3    | 7.9082 | BM25+QueryExpansion    |
+| 1        | Q0 | 7581911    | 4    | 7.7017 | BM25+QueryExpansion    |
+| 1        | Q0 | 20155713   | 5    | 7.5632 | BM25+QueryExpansion    |
+| 1        | Q0 | 36480032   | 6    | 7.4186 | BM25+QueryExpansion    |
+| 1        | Q0 | 26071782   | 7    | 7.2713 | BM25+QueryExpansion    |
+| 1        | Q0 | 3566945    | 8    | 6.3707 | BM25+QueryExpansion    |
+| 1        | Q0 | 1203035    | 9    | 6.2630 | BM25+QueryExpansion    |
+| 1        | Q0 | 21456232   | 10   | 6.2630 | BM25+QueryExpansion    |
+| 3        | Q0 | 4414547    | 1    | 31.9735 | BM25+QueryExpansion   |
+| 3        | Q0 | 4378885    | 2    | 28.0432 | BM25+QueryExpansion   |
+| 3        | Q0 | 2739854    | 3    | 26.8367 | BM25+QueryExpansion   |
+| 3        | Q0 | 23389795   | 4    | 25.5799 | BM25+QueryExpansion   |
+| 3        | Q0 | 14717500   | 5    | 25.4328 | BM25+QueryExpansion   |
+| 3        | Q0 | 4632921    | 6    | 24.8410 | BM25+QueryExpansion   |
+| 3        | Q0 | 13519661   | 7    | 23.6196 | BM25+QueryExpansion   |
+| 3        | Q0 | 2107238    | 8    | 23.3042 | BM25+QueryExpansion   |
+| 3        | Q0 | 19058822   | 9    | 22.2002 | BM25+QueryExpansion   |
+| 3        | Q0 | 43334921   | 10   | 21.3640 | BM25+QueryExpansion   |
 
 ### **Mean Average Precision (MAP)**
 - **MAP Score:** **0.5717**
