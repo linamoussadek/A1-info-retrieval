@@ -4,7 +4,7 @@
 |------------|--------------|------------|
 |Lina Moussadek|{Insert Student #}|Part 1|
 |Jack Snelgrove|300247435|Part 2|
-|Eli Wynn|{Insert Student #}|Part 3|
+|Eli Wynn|300248135|Part 3|
 
 ## Code Overview
 
