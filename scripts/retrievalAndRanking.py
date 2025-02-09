@@ -9,14 +9,16 @@ def compute_tf_idf(inverted_index, num_docs):
     
     for term, doc_dict in inverted_index.items():
         df = len(doc_dict)  # Document frequency
-        idf = math.log((num_docs / (df + 1)))  # IDF with smoothing
+        idf = math.log((num_docs / (df+1)),2)  # IDF with smoothing
         
         for doc_id, positions in doc_dict.items():
-            tf = len(positions)  # Term frequency
+            tf = positions  # Term frequency
             tf_idf[doc_id][term] = (1 + math.log(tf)) * idf  # TF-IDF calculation
     
     return tf_idf
 
+
+#code based upon the lectures and this website https://blog.christianperone.com/2011/09/machine-learning-text-feature-extraction-tf-idf-part-i/
 def compute_cosine_similarity(query_tokens, inverted_index, tf_idf):
     """ Compute cosine similarity between query and documents """
     query_tf = defaultdict(int)
@@ -40,8 +42,7 @@ def compute_cosine_similarity(query_tokens, inverted_index, tf_idf):
 
 def retrieve_and_rank(query, inverted_index, num_docs):
     """ Process query and return ranked documents """
-    # No additional preprocessing needed, use query text directly
-    query_tokens = query.split()  # Assuming the query is already processed
+    query_tokens = query.split() 
     tf_idf = compute_tf_idf(inverted_index, num_docs)
     ranked_docs = compute_cosine_similarity(query_tokens, inverted_index, tf_idf)
     return ranked_docs
@@ -56,16 +57,20 @@ def load_processed_corpus(processed_file):
 
 def load_queries(query_file):
     with open(query_file, 'r') as f:
-        return [json.loads(line) for line in f][:20]  # Load first 20 queries
+        return [json.loads(line) for line in f]  # Load first 20 queries
 
 def main():
     index_file = "../scifact/invertedIndex.json"
     query_file = "../scifact/queries.jsonl"
+    count_file = "../scifact/processed_corpus.json"
     output_file = "Results.txt"
     
     inverted_index = load_inverted_index(index_file)
     queries = load_queries(query_file)
-    num_docs = len(set(doc_id for term in inverted_index for doc_id in inverted_index[term]))
+    countFile = load_processed_corpus(count_file)
+    num_docs = 0
+    for document in countFile:
+        num_docs+=1
     
     with open(output_file, "w") as f:
         f.write(f"Query ID | Q0 | doc ID | ranking | score | Tag\n")
