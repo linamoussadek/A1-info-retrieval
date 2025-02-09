@@ -3,7 +3,7 @@
 **Due: Feb 9, 10 PM**
 
 ## **Group Members**
-- **Jack Snelgrove** - 
+- **Jack Snelgrove** - 300247435
 - **Lina Moussadek** - 300259985
 - **Eli Wynn** - 
 
