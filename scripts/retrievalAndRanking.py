@@ -76,10 +76,10 @@ def load_inverted_index(index_file):
     return data["index"], data["doc_lengths"], data["idf"]
 
 if __name__ == "__main__":
-    index_file = "../scifact/invertedIndex.json"
+    index_file = "../output/invertedIndex.json"
     query_file = "../scifact/queries.jsonl"
     stopwords_file = "../stopwords.txt"
-    output_file = "Results.txt"
+    output_file = "../output/Results.txt"
 
     # Load resources
     inverted_index, doc_lengths, idf_values = load_inverted_index(index_file)
@@ -91,7 +91,6 @@ if __name__ == "__main__":
         f.write("Query ID | Q0 | doc ID | ranking | score | Tag\n")
         for query in queries:
             ranked_results = retrieve_and_rank(query["text"], inverted_index, doc_lengths, idf_values, stopwords_set)
-
             for rank, (doc_id, score) in enumerate(ranked_results[:100], start=1):
                 f.write(f"{query['_id']} Q0 {doc_id} {rank} {score:.4f} BM25+QueryExpansion\n")
 

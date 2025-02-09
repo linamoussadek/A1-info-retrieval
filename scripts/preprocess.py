@@ -37,5 +37,5 @@ def preprocess_corpus(corpus_file, stopwords_file, output_file):
         json.dump(preprocessed_data, f)
 
 if __name__ == "__main__":
-    preprocess_corpus("../scifact/corpus.jsonl", "../stopwords.txt", "../scifact/preprocessed_corpus.json")
-    print("Preprocessing complete. Output saved to ../scifact/preprocessed_corpus.json")
+    preprocess_corpus("../scifact/corpus.jsonl", "../stopwords.txt", "../output/preprocessed_corpus.json")
+    print("Preprocessing complete. Output saved to ../output/preprocessed_corpus.json")
