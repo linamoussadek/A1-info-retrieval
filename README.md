@@ -5,7 +5,7 @@
 ## **Group Members**
 - **Jack Snelgrove** - 300247435
 - **Lina Moussadek** - 300259985
-- **Eli Wynn** - 
+- **Eli Wynn** - 300248135
 
 ### **Task Division**
 - **Preprocessing & Stopword Removal:** Lina Moussadek
@@ -259,6 +259,8 @@ The retrieval and ranking step is responsible for returning the most relevant do
 | 3        | Q0 | 2107238    | 8    | 23.3042 | BM25+QueryExpansion   |
 | 3        | Q0 | 19058822   | 9    | 22.2002 | BM25+QueryExpansion   |
 | 3        | Q0 | 43334921   | 10   | 21.3640 | BM25+QueryExpansion   |
+
+Query expansion using pseudo-relevance feedback (PRF) and WordNet improved recall but may introduce noise. The top-ranked documents for Query 1 had closely clustered scores, indicating strong relevance, while Query 3 showed high term matching being almost triple the highest match to query 1. While the system effectively retrieves relevant results, PRF and synonym weighting could be refined to reduce irrelevant matches.
 
 ### **Mean Average Precision (MAP)**
 - **MAP Score:** **0.5717**
