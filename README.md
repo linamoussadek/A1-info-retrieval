@@ -230,22 +230,29 @@ The retrieval and ranking step is responsible for returning the most relevant do
 
 ## **Evaluation & Results**
 ### **Vocabulary Size**
-Total unique terms in the corpus: **[X]**
+- **Total unique terms in the corpus:** **19,767**
 
 #### **Sample 100 Tokens**
-`[token1, token2, token3, ..., token100]`
+```
+['chromoendoscopi', 'meca', 'mcherri', 'subscal', 'varna', 'hind', 'glomeruli', 'gpib', 'cystogenesi', 'subtrop', 'ethiopia', 'theobroma', 'bmax', 'obes', 'aldh', 'fructo', 'orx', 'vasculogenesi', 'ucv', 'aga', 'gliotoxin', 'halothan', 'candid', 'snapshot', 'vasculitid', 'periplasm', 'costal', 'further', 'vulva', 'vanderw', 'wield', 'nonbenefici', 'falsifi', 'sensit', 'thermosens', 'gliotransmiss', 'weibel', 'kelvin', 'eupathdb', 'ascari', 'ws', 'ziprasidon', 'casp', 'androgenet', 'frontotempor', 'docetaxel', 'ehrlichia', 'underestim', 'neutral', 'transtheoret', 'interspers', 'corticotrop', 'lymphangioleiomyomatosi', 'inkt', 'recur', 'smac', 'methanogen', 'xenopu', 'ephrin', 'cushion', 'taylor', 'greenhous', 'hla', 'inspir', 'ni', 'jak', 'turner', 'misexpress', 'proposit', 'raybio', 'decam', 'mercuri', 'mellitu', 'postdisast', 'rorbeta', 'khoula', 'procedur', 'raven', 'desert', 'glutaryl', 'rhabdoid', 'ribulos', 'scholarli', 'glutaminas', 'dna', 'paradigm', 'cardin', 'tangl', 'zomba', 'reassembl', 'hemophiliac', 'perimet', 'strictli', 'compartment', 'iodo', 'nih', 'insidi', 'ac', 'ahf', 'curricula']
+```
 
 #### **First 10 Results for Queries 1 & 3**
 | Query ID | Q0 | Document ID | Rank | Score | Run Name |
-|----------|----|-------------|------|-------|----------|
-| 1        | Q0 | 123456      | 1    | 0.8723 | BM25+QE  |
-| 1        | Q0 | 789101      | 2    | 0.7654 | BM25+QE  |
-| 3        | Q0 | 112233      | 1    | 0.9123 | BM25+QE  |
-| 3        | Q0 | 445566      | 2    | 0.8056 | BM25+QE  |
+|----------|----|-------------|------|-------|------------------|
+| 1        | Q0 | 21257564    | 1    | 9.7562 | BM25+QueryExpansion |
+| 1        | Q0 | 18953920    | 2    | 8.3847 | BM25+QueryExpansion |
+| 1        | Q0 | 13231899    | 3    | 7.9082 | BM25+QueryExpansion |
+| 1        | Q0 | 7581911     | 4    | 7.7017 | BM25+QueryExpansion |
+| 1        | Q0 | 20155713    | 5    | 7.5632 | BM25+QueryExpansion |
+| 3        | Q0 | 21456232    | 10   | 6.2630 | BM25+QueryExpansion |
 
 ### **Mean Average Precision (MAP)**
-- **MAP Score:** `[X.XX]`
-- **MAP Score (With Query Expansion):** `[X.XX]`
+- **MAP Score:** **0.5717**
+- **Precision @ 10:** **0.0833**
+- **Recall @ 20:** **0.8171**
+- **Recall @ 100:** **0.8850**
+- **NDCG:** **0.6446**
 
 ## **References**
 - BEIR Collection: [https://beir.ai/](https://beir.ai/)
